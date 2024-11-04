@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>下载</title>
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent; /* 移除 Android 设备上的点击高亮 */
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            cursor: pointer;
+        }
+
+        .down {
+            padding: 8px 32px;
+            background: #3670f7;
+            color: white;
+            border-radius: 32px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div id="down" class="container">
+    <div class="down">下载</div>
+</div>
+<script>
+    const down = document.getElementById('down')
+    down.addEventListener('click', function () {
+        window.location.href = 'http://xxxxx/app-release.apk';
+    })
+</script>
+</body>
+</html>
