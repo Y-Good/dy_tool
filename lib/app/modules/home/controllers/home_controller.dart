@@ -97,6 +97,9 @@ class HomeController extends GetxController
 
   /// 删除文件
   void onDeleteFile(IFile item) {
+    if (item == selectFile.value) {
+      player.stop();
+    }
     datas.remove(item);
     if (Get.isDialogOpen == true) Get.back();
     File file = File(item.path);
