@@ -14,10 +14,10 @@ class Utils {
         child: UnconstrainedBox(
           child: Container(
             height: 100,
-            constraints: const BoxConstraints(minWidth: 100,maxWidth: 200),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
+            constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
+            decoration: BoxDecoration(
+              color: Get.isDarkMode ? const Color(0xFF606060) : Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -34,7 +34,12 @@ class Utils {
                   text,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Get.isDarkMode
+                        ? Colors.white.withOpacity(.9)
+                        : Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -71,6 +76,7 @@ class Utils {
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
+      backgroundColor: const Color(0xFF606060),
     );
   }
 

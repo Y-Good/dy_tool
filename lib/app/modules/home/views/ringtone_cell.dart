@@ -26,8 +26,11 @@ class RingtoneCell extends StatelessWidget {
       onLongPress: onLongPress,
       onTap: onTap,
       child: Container(
-        color:
-            selected ? Theme.of(context).primaryColor.withOpacity(.05) : null,
+        color: selected
+            ? Get.isDarkMode
+                ? const Color(0xFF191919)
+                : Theme.of(context).primaryColor.withOpacity(.05)
+            : null,
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 10,
@@ -42,7 +45,10 @@ class RingtoneCell extends StatelessWidget {
                     item.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: !Get.isDarkMode ? Colors.black : Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(

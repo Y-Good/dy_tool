@@ -1,3 +1,4 @@
+import 'package:douyin_ringtone/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,8 +19,10 @@ class HomeView extends GetView<HomeController> {
         title: const Text('铃声'),
         actions: [
           IconButton(
+            color:Get.isDarkMode ? Colors.white : Colors.black,
             icon: const Icon(Icons.refresh),
-            onPressed: () => ctl.readFolderFiles(true),
+            // onPressed: () => ctl.readFolderFiles(true),
+            onPressed: () => Utils.showToast("正在解析"),
           ),
         ],
       ),
