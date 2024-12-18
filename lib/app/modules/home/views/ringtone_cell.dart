@@ -12,6 +12,8 @@ class RingtoneCell extends StatelessWidget {
     required this.item,
     this.onTap,
     this.onLongPress,
+    this.duration = 0,
+    this.currentTime = 0,
   });
 
   final bool selected;
@@ -19,57 +21,76 @@ class RingtoneCell extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
+  final int duration;
+  final int currentTime;
+
   @override
   Widget build(BuildContext context) {
     final ctl = Get.find<HomeController>();
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onLongPress: onLongPress,
       onTap: onTap,
-      child: Container(
-        color: selected
-            ? Get.isDarkMode
-                ? const Color(0xFF191919)
-                : Theme.of(context).primaryColor.withOpacity(.05)
-            : null,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 10,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: !Get.isDarkMode ? Colors.black : Colors.white,
-                    ),
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 10,
+            ),
+            color: selected
+                ? Get.isDarkMode
+                    ? const Color(0xFF191919)
+                    : Theme.of(context).primaryColor.withOpacity(.05)
+                : null,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDark ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "${Utils.formatFileSize(item.size)}\t|\t${Utils.formatTime(item.time)}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "${Utils.formatFileSize(item.size)}\t|\t${Utils.formatTime(item.time)}",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
+                ),
+                CustomPaint(
+                  size: const Size(20, 20),
+                  painter: CustomRadio(
+                    selected: selected,
+                    animation: ctl.animation,
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          if (duration != 0 && selected)
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              height: 4,
+              width: (currentTime / duration) * Get.width,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(4),
               ),
             ),
-            CustomPaint(
-              size: const Size(20, 20),
-              painter: CustomRadio(
-                selected: selected,
-                animation: ctl.animation,
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

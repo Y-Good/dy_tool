@@ -1,4 +1,3 @@
-import 'package:douyin_ringtone/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,16 +12,16 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final ctl = Get.find<HomeController>();
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Theme.of(context).primaryColor,
         title: const Text('铃声'),
         actions: [
           IconButton(
-            color:Get.isDarkMode ? Colors.white : Colors.black,
+            color: isDark ? Colors.white : Colors.black,
             icon: const Icon(Icons.refresh),
-            // onPressed: () => ctl.readFolderFiles(true),
-            onPressed: () => Utils.showToast("正在解析"),
+            onPressed: () => ctl.readFolderFiles(true),
           ),
         ],
       ),
@@ -57,10 +56,13 @@ class HomeView extends GetView<HomeController> {
             var item = ctl.datas[idx];
             return Obx(() {
               return RingtoneCell(
+                key: ValueKey(item.name),
                 selected: item == ctl.selectFile.value,
                 item: item,
                 onTap: () => ctl.onSelected(item),
                 onLongPress: () => ctl.onOption(ctx, item),
+                duration: ctl.totalTime.value,
+                currentTime: ctl.currentTime.value,
               );
             });
           },

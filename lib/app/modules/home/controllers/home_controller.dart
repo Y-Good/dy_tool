@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -23,17 +24,31 @@ class HomeController extends GetxController
   List<IFile> datas = <IFile>[].obs;
   Rx<IFile> selectFile = IFile("", "", 0, DateTime.now()).obs;
   Rx<bool> refreshing = false.obs;
+  Rx<int> currentTime = 0.obs;
+  Rx<int> totalTime = 0.obs;
+
+  StreamSubscription? _durationSubscription;
+  StreamSubscription? _positionSubscription;
+  StreamSubscription? _playerCompleteSubscription;
 
   @override
   Future<void> onInit() async {
-    _listener = AppLifecycleListener(
-      onPause: () => player.stop(),
-    );
+    _listener = AppLifecycleListener(onPause: () => player.stop());
     controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
     animation = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
+    _durationSubscription = player.onDurationChanged.listen((duration) {
+      totalTime.value = duration.inSeconds;
+    });
+    _positionSubscription = player.onPositionChanged.listen((p) {
+      currentTime.value = p.inSeconds;
+    });
+    _playerCompleteSubscription = player.onPlayerComplete.listen((event) {
+      totalTime.value = 0;
+      player.state = PlayerState.stopped;
+    });
 
     try {
       var status = await Permission.storage.status;
@@ -41,9 +56,8 @@ class HomeController extends GetxController
         await readFolderFiles();
       } else {
         await Permission.storage.request().then((v) async {
-          if (v.isGranted) {
-            await readFolderFiles();
-          }
+          if (!v.isGranted) return;
+          await readFolderFiles();
         });
       }
     } catch (e) {
@@ -196,6 +210,9 @@ class HomeController extends GetxController
   @override
   void onClose() {
     _listener.dispose();
+    _durationSubscription?.cancel();
+    _positionSubscription?.cancel();
+    _playerCompleteSubscription?.cancel();
     super.onClose();
   }
 }
