@@ -1,3 +1,4 @@
+import 'package:douyin_ringtone/app/modules/home/views/play_float.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -61,22 +62,53 @@ class HomeView extends GetView<HomeController> {
                 item: item,
                 onTap: () => ctl.onSelected(item),
                 onLongPress: () => ctl.onOption(ctx, item),
-                duration: ctl.totalTime.value,
-                currentTime: ctl.currentTime.value,
               );
             });
           },
           itemCount: ctl.datas.length,
         );
       }),
-      bottomNavigationBar: CupertinoButton(
-        color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.zero,
-        onPressed: ctl.onImport,
-        child: const Text(
-          "导入",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 16),
+            child: PlayFloat(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12).copyWith(bottom: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: CupertinoButton(
+                    color: const Color(0xFFefefef),
+                    borderRadius: const BorderRadius.all(Radius.circular(99)),
+                    onPressed: ctl.onImport,
+                    child: Text(
+                      "导入",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: CupertinoButton(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(99)),
+                    onPressed: ctl.onSetRingtone,
+                    child: const Text(
+                      "设置",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

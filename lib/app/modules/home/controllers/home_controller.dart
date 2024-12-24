@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:douyin_ringtone/app/api/api.dart';
 import 'package:douyin_ringtone/app/models/i_file.dart';
+import 'package:douyin_ringtone/utils/event_bus_utils.dart';
 import 'package:douyin_ringtone/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,37 +18,19 @@ class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> animation;
-  late AppLifecycleListener _listener;
   final Dio dio = Dio();
-  final AudioPlayer player = AudioPlayer();
+
   List<IFile> datas = <IFile>[].obs;
   Rx<IFile> selectFile = IFile("", "", 0, DateTime.now()).obs;
   Rx<bool> refreshing = false.obs;
-  Rx<int> currentTime = 0.obs;
-  Rx<int> totalTime = 0.obs;
-
-  StreamSubscription? _durationSubscription;
-  StreamSubscription? _positionSubscription;
-  StreamSubscription? _playerCompleteSubscription;
 
   @override
   Future<void> onInit() async {
-    _listener = AppLifecycleListener(onPause: () => player.stop());
     controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
     animation = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
-    _durationSubscription = player.onDurationChanged.listen((duration) {
-      totalTime.value = duration.inSeconds;
-    });
-    _positionSubscription = player.onPositionChanged.listen((p) {
-      currentTime.value = p.inSeconds;
-    });
-    _playerCompleteSubscription = player.onPlayerComplete.listen((event) {
-      totalTime.value = 0;
-      player.state = PlayerState.stopped;
-    });
 
     try {
       var status = await Permission.storage.status;
@@ -66,23 +48,24 @@ class HomeController extends GetxController
     super.onInit();
   }
 
-  /// 设置铃声
-  Future<void> onSelected(IFile item) async {
-    if (player.state == PlayerState.playing) {
-      await player.stop();
-    }
-    player.play(DeviceFileSource(item.path));
+  void onSelected(IFile item) {
+    bus.fire(PlayEvent(item));
     if (item == selectFile.value) return;
+    selectFile.value = item;
     controller.reset();
     controller.forward();
+  }
+
+  /// 设置铃声
+  Future<void> onSetRingtone() async {
     // bool isWriteSettingsGranted = await Ringtone.isWriteSettingsGranted;
     // if (!isWriteSettingsGranted) {
     //   Utils.showToast("请先授予权限");
     //   return;
     // }
-    bool res = await Ringtone.setRingtoneFromFile(File(item.path));
+    bool res = await Ringtone.setRingtoneFromFile(File(selectFile.value.path));
     if (res) {
-      selectFile.value = item;
+      Utils.showToast("已设置为铃声");
     } else {
       Utils.showToast("设置失败");
     }
@@ -111,9 +94,9 @@ class HomeController extends GetxController
 
   /// 删除文件
   void onDeleteFile(IFile item) {
-    if (item == selectFile.value) {
-      player.stop();
-    }
+    // if (item == selectFile.value) {
+    //   player.stop();
+    // }
     datas.remove(item);
     if (Get.isDialogOpen == true) Get.back();
     File file = File(item.path);
@@ -168,6 +151,8 @@ class HomeController extends GetxController
   Future<void> readFolderFiles([bool isRefresh = false]) async {
     refreshing.value = true;
     if (isRefresh) datas.clear();
+
+    //storage/emulated/0/Android/data/com.hasay.douyin_ringtone/files/downloads
     Directory? folderPath = await getDownloadsDirectory();
     if (folderPath == null) return;
     if (!folderPath.existsSync()) {
@@ -205,14 +190,5 @@ class HomeController extends GetxController
       controller.forward();
     }
     refreshing.value = false;
-  }
-
-  @override
-  void onClose() {
-    _listener.dispose();
-    _durationSubscription?.cancel();
-    _positionSubscription?.cancel();
-    _playerCompleteSubscription?.cancel();
-    super.onClose();
   }
 }

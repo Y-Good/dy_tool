@@ -12,17 +12,12 @@ class RingtoneCell extends StatelessWidget {
     required this.item,
     this.onTap,
     this.onLongPress,
-    this.duration = 0,
-    this.currentTime = 0,
   });
 
   final bool selected;
   final IFile item;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
-
-  final int duration;
-  final int currentTime;
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +75,6 @@ class RingtoneCell extends StatelessWidget {
               ],
             ),
           ),
-          if (duration != 0 && selected)
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              height: 4,
-              width: (currentTime / duration) * Get.width,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
         ],
       ),
     );

@@ -47,6 +47,7 @@ dependencies:
     path: ./packages/set_ringtone
   audioplayers: ^6.1.0
   device_info_plus: ^11.1.1
+  event_bus: ^2.0.1
 
 dev_dependencies:
   flutter_test:
