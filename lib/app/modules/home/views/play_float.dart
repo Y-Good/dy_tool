@@ -34,15 +34,18 @@ class _PlayFloatState extends State<PlayFloat> {
       isPlaying = true;
       setState(() {});
     });
+
     _positionSubscription = player.onPositionChanged.listen((p) {
       currentTime.value = p.inSeconds;
     });
+
     _playerCompleteSubscription = player.onPlayerComplete.listen((event) {
       totalTime = 0;
       player.state = PlayerState.stopped;
       isPlaying = false;
       setState(() {});
     });
+
     _listener = AppLifecycleListener(onPause: () {
       player.pause();
       isPlaying = false;
@@ -57,6 +60,17 @@ class _PlayFloatState extends State<PlayFloat> {
       setState(() {});
       await player.stop();
       player.play(DeviceFileSource(e.file.path));
+    });
+
+    bus.on<DeleteEvent>().listen((e) {
+      if (e.file.path == file?.path) {
+        player.stop();
+        file = null;
+        isPlaying = false;
+        totalTime = 0;
+        currentTime.value = 0;
+        setState(() {});
+      }
     });
     super.initState();
   }
@@ -118,48 +132,46 @@ class _PlayFloatState extends State<PlayFloat> {
               child: ColoredBox(
                 color: Colors.transparent,
                 child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 16,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
+                  child: SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: ValueListenableBuilder<int>(
+                            valueListenable: currentTime,
+                            builder: (_, v, ___) {
+                              return CircularProgressIndicator(
+                                strokeCap: StrokeCap.round,
+                                backgroundColor: Colors.black26,
+                                color: Colors.black87,
+                                strokeWidth: 2,
+                                value: totalTime == 0 ? 0 : v / totalTime,
+                              );
+                            },
+                          ),
+                        ),
+                        AnimatedCrossFade(
+                          crossFadeState: isPlaying
+                              ? CrossFadeState.showFirst
+                              : CrossFadeState.showSecond,
+                          duration: const Duration(milliseconds: 150),
+                          firstChild: const Icon(Icons.pause_rounded, size: 20),
+                          secondChild: const Icon(
+                            Icons.play_arrow_rounded,
+                            size: 22,
+                          ),
+                        ),
+                      ],
                     ),
-                    child: SizedBox(
-                      width: 26,
-                      height: 26,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(1.0),
-                            child: ValueListenableBuilder<int>(
-                              valueListenable: currentTime,
-                              builder: (_, v, ___) {
-                                return CircularProgressIndicator(
-                                  strokeCap: StrokeCap.round,
-                                  backgroundColor: Colors.black26,
-                                  color: Colors.black87,
-                                  strokeWidth: 2,
-                                  value: totalTime == 0 ? 0 : v / totalTime,
-                                );
-                              },
-                            ),
-                          ),
-                          AnimatedCrossFade(
-                            crossFadeState: isPlaying
-                                ? CrossFadeState.showFirst
-                                : CrossFadeState.showSecond,
-                            duration: const Duration(milliseconds: 150),
-                            firstChild: const Icon(
-                              Icons.pause_rounded,
-                              size: 20,
-                            ),
-                            secondChild: const Icon(
-                              Icons.play_arrow_rounded,
-                              size: 22,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
+                  ),
+                ),
               ),
             ),
           ],

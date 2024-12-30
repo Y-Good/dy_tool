@@ -63,6 +63,7 @@ class HomeController extends GetxController
     //   Utils.showToast("请先授予权限");
     //   return;
     // }
+    if (selectFile.value.path.isEmpty) return Utils.showToast("未选择文件");
     bool res = await Ringtone.setRingtoneFromFile(File(selectFile.value.path));
     if (res) {
       Utils.showToast("已设置为铃声");
@@ -93,14 +94,16 @@ class HomeController extends GetxController
   }
 
   /// 删除文件
-  void onDeleteFile(IFile item) {
+  Future<void> onDeleteFile(IFile item) async {
     // if (item == selectFile.value) {
     //   player.stop();
     // }
     datas.remove(item);
     if (Get.isDialogOpen == true) Get.back();
     File file = File(item.path);
-    file.delete();
+    bus.fire(DeleteEvent(item));
+    await file.delete();
+    await Ringtone.deleteRingtone(file);
   }
 
   /// 导入文件

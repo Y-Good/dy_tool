@@ -211,7 +211,9 @@ public class RingtonePlugin implements FlutterPlugin, MethodCallHandler {
 //        return uri.toString();
     }
 
-    public static void deleteFilesInDirectory(String filePath) {
+    public static void deleteFilesInDirectory(String fileName) {
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Ringtones/music/" + fileName;
+
         File file = new File(filePath);
 
         if (!file.exists()) {
@@ -227,7 +229,7 @@ public class RingtonePlugin implements FlutterPlugin, MethodCallHandler {
         if (mFile.exists()) {
             // Android 10 or newer
             if (android.os.Build.VERSION.SDK_INT > 28) {// file.exists
-                deleteFilesInDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Ringtones/music/" + mFile.getName());
+                deleteFilesInDirectory(mFile.getName());
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Audio.Media.DISPLAY_NAME, mFile.getName());
                 values.put(MediaStore.Audio.Media.MIME_TYPE, getMIMEType(mFile.getAbsolutePath()));
@@ -304,6 +306,8 @@ public class RingtonePlugin implements FlutterPlugin, MethodCallHandler {
         } else if (call.method.equals("getRingtone")) {
 //            Uri ringtone = getRingtone();
             result.success(getRingtone());
+        } else if (call.method.equals("deleteRingtone")) {
+            deleteFilesInDirectory(call.argument("fileName"));
         } else {
             result.notImplemented();
         }

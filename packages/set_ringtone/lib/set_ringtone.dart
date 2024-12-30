@@ -21,4 +21,9 @@ class Ringtone {
   static Future<String?> getRingtone() async {
     return await _channel.invokeMethod("getRingtone");
   }
+
+  static Future<void> deleteRingtone(File file) async {
+    final String fileName = file.path.split("/").last;
+    await _channel.invokeMethod("deleteRingtone", {"fileName": fileName});
+  }
 }
