@@ -44,7 +44,6 @@ class HomeController extends GetxController
         });
       }
     } catch (e) {
-      print(e);
       Utils.showToast(e.toString());
     }
     super.onInit();
