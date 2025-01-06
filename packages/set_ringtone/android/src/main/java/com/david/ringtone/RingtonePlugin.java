@@ -195,20 +195,7 @@ public class RingtonePlugin implements FlutterPlugin, MethodCallHandler {
 
     private String getRingtone() {
         Uri uri = RingtoneManager.getActualDefaultRingtoneUri(mContext, RingtoneManager.TYPE_RINGTONE);
-        Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
-        try {
-            if (cursor.moveToFirst()) {
-                int nameColumnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
-                return cursor.getString(nameColumnIndex);
-            }
-        } finally {
-            cursor.close();
-        }
-        return null;
-//        return uri.toString();
+        return RingtoneManager.getRingtone(mContext, uri).getTitle(mContext);
     }
 
     public static void deleteFilesInDirectory(String fileName) {

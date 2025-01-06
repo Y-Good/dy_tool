@@ -23,6 +23,7 @@ class HomeController extends GetxController
   List<IFile> datas = <IFile>[].obs;
   Rx<IFile> selectFile = IFile("", "", 0, DateTime.now()).obs;
   Rx<bool> refreshing = false.obs;
+  Rx<String> currentRingtone = "".obs;
 
   @override
   Future<void> onInit() async {
@@ -43,6 +44,7 @@ class HomeController extends GetxController
         });
       }
     } catch (e) {
+      print(e);
       Utils.showToast(e.toString());
     }
     super.onInit();
@@ -66,6 +68,7 @@ class HomeController extends GetxController
     if (selectFile.value.path.isEmpty) return Utils.showToast("未选择文件");
     bool res = await Ringtone.setRingtoneFromFile(File(selectFile.value.path));
     if (res) {
+      currentRingtone.value = selectFile.value.name;
       Utils.showToast("已设置为铃声");
     } else {
       Utils.showToast("设置失败");
@@ -104,6 +107,8 @@ class HomeController extends GetxController
     bus.fire(DeleteEvent(item));
     await file.delete();
     await Ringtone.deleteRingtone(file);
+    selectFile.value = IFile("", "", 0, DateTime.now());
+    currentRingtone.value = await Ringtone.getRingtone() ?? "铃声";
   }
 
   /// 导入文件
@@ -174,11 +179,12 @@ class HomeController extends GetxController
       );
       datas.add(item);
     }
+    String? res = await Ringtone.getRingtone();
+    currentRingtone.value = res ?? "铃声";
     if (isRefresh) {
       refreshing.value = false;
       return;
     }
-    String? res = await Ringtone.getRingtone();
     if (res == null) {
       Utils.showToast("没有铃声文件");
       refreshing.value = false;

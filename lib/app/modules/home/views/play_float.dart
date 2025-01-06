@@ -123,7 +123,9 @@ class _PlayFloatState extends State<PlayFloat> {
             Expanded(
               child: Text(
                 file?.name ?? "-",
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold, height: 1),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
             const SizedBox(width: 12),

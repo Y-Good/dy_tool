@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../../models/i_file.dart';
 import '../controllers/home_controller.dart';
 
-class RingtoneCell extends StatelessWidget {
+class RingtoneCell extends StatefulWidget {
   const RingtoneCell({
     super.key,
     required this.selected,
@@ -20,25 +20,30 @@ class RingtoneCell extends StatelessWidget {
   final VoidCallback? onLongPress;
 
   @override
+  State<RingtoneCell> createState() => _RingtoneCellState();
+}
+
+class _RingtoneCellState extends State<RingtoneCell> {
+  @override
   Widget build(BuildContext context) {
     final ctl = Get.find<HomeController>();
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-    return InkWell(
-      onLongPress: onLongPress,
-      onTap: onTap,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 10,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: Material(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+        child: InkWell(
+          onLongPress: widget.onLongPress,
+          onTap: widget.onTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            // margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              // color: Colors.white,
             ),
-            color: selected
-                ? Get.isDarkMode
-                    ? const Color(0xFF191919)
-                    : Theme.of(context).primaryColor.withOpacity(.05)
-                : null,
             child: Row(
               children: [
                 Expanded(
@@ -46,7 +51,7 @@ class RingtoneCell extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item.name,
+                        widget.item.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -54,9 +59,9 @@ class RingtoneCell extends StatelessWidget {
                           color: isDark ? Colors.white : Colors.black,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Text(
-                        "${Utils.formatFileSize(item.size)}\t|\t${Utils.formatTime(item.time)}",
+                        "${Utils.formatFileSize(widget.item.size)}\t|\t${Utils.formatTime(widget.item.time)}",
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.grey,
@@ -65,17 +70,18 @@ class RingtoneCell extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(width: 12),
                 CustomPaint(
                   size: const Size(20, 20),
                   painter: CustomRadio(
-                    selected: selected,
+                    selected: widget.selected,
                     animation: ctl.animation,
                   ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

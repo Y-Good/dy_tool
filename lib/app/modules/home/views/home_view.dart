@@ -13,14 +13,31 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final ctl = Get.find<HomeController>();
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      backgroundColor: const Color(0xFFf6f6f6),
       appBar: AppBar(
         // backgroundColor: Theme.of(context).primaryColor,
-        title: const Text('铃声'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "当前铃声",
+              style: TextStyle(fontSize: 10, color: Colors.grey),
+            ),
+            const SizedBox(height: 4),
+            Obx(() {
+              return Text(
+                ctl.currentRingtone.value,
+                style: const TextStyle(fontSize: 14),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              );
+            })
+          ],
+        ),
         actions: [
           IconButton(
-            color: isDark ? Colors.white : Colors.black,
+            color: Colors.black,
             icon: const Icon(Icons.refresh),
             onPressed: () => ctl.readFolderFiles(true),
           ),
@@ -53,6 +70,7 @@ class HomeView extends GetView<HomeController> {
           );
         }
         return ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 6),
           itemBuilder: (ctx, idx) {
             var item = ctl.datas[idx];
             return Obx(() {
@@ -76,12 +94,13 @@ class HomeView extends GetView<HomeController> {
             child: PlayFloat(),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12).copyWith(bottom: 12),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12).copyWith(bottom: 12),
             child: Row(
               children: [
                 Expanded(
                   child: CupertinoButton(
-                    color: const Color(0xFFefefef),
+                    color: Colors.white,
                     borderRadius: const BorderRadius.all(Radius.circular(99)),
                     onPressed: ctl.onImport,
                     child: Text(
