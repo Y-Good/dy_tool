@@ -27,12 +27,11 @@ class _RingtoneCellState extends State<RingtoneCell> {
   @override
   Widget build(BuildContext context) {
     final ctl = Get.find<HomeController>();
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: Material(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
+        color: const Color(0xFF596780),
         child: InkWell(
           onLongPress: widget.onLongPress,
           onTap: widget.onTap,
@@ -54,17 +53,18 @@ class _RingtoneCellState extends State<RingtoneCell> {
                         widget.item.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
-                          color: isDark ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFFE0E9F4),
                         ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         "${Utils.formatFileSize(widget.item.size)}\t|\t${Utils.formatTime(widget.item.time)}",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey,
+                          color: const Color(0xFFE0E9F4).withOpacity(0.7),
                         ),
                       ),
                     ],

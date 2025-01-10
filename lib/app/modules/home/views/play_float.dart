@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:douyin_ringtone/app/models/i_file.dart';
@@ -114,7 +115,7 @@ class _PlayFloatState extends State<PlayFloat> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor.withOpacity(.1),
+          color: const Color(0xFF596780),
           borderRadius: BorderRadius.circular(99),
         ),
         child: Row(
@@ -123,7 +124,11 @@ class _PlayFloatState extends State<PlayFloat> {
             Expanded(
               child: Text(
                 file?.name ?? "-",
-                style: const TextStyle(fontWeight: FontWeight.bold, height: 1),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  height: 1,
+                  color: Colors.white,
+                ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
@@ -151,8 +156,8 @@ class _PlayFloatState extends State<PlayFloat> {
                             builder: (_, v, ___) {
                               return CircularProgressIndicator(
                                 strokeCap: StrokeCap.round,
-                                backgroundColor: Colors.black26,
-                                color: Colors.black87,
+                                backgroundColor: Colors.white54,
+                                color: Colors.white,
                                 strokeWidth: 2,
                                 value: totalTime == 0 ? 0 : v / totalTime,
                               );
@@ -164,10 +169,15 @@ class _PlayFloatState extends State<PlayFloat> {
                               ? CrossFadeState.showFirst
                               : CrossFadeState.showSecond,
                           duration: const Duration(milliseconds: 150),
-                          firstChild: const Icon(Icons.pause_rounded, size: 20),
+                          firstChild: const Icon(
+                            Icons.pause_rounded,
+                            size: 19,
+                            color: Colors.white,
+                          ),
                           secondChild: const Icon(
                             Icons.play_arrow_rounded,
                             size: 22,
+                            color: Colors.white,
                           ),
                         ),
                       ],

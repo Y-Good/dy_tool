@@ -31,25 +31,12 @@ void main() {
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFF3670f7),
-        scaffoldBackgroundColor: Colors.white,
+        primaryColor: const Color(0xFF0957DE),
+        scaffoldBackgroundColor: const Color(0xFF040815),
         textTheme: const TextTheme(),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-          ),
-          elevation: 0,
-        ),
-      ),
-      darkTheme: ThemeData(
-        primaryColor: const Color(0xFF3670f7),
-        scaffoldBackgroundColor: Colors.black,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black,
-          surfaceTintColor: Colors.black,
+          backgroundColor: Color(0xFF040815),
+          surfaceTintColor: Color(0xFF040815),
           titleTextStyle: TextStyle(
             color: Colors.white,
             fontSize: 18,

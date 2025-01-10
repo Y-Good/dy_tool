@@ -79,13 +79,14 @@ class HomeController extends GetxController
     Get.dialog(
       UnconstrainedBox(
         child: Material(
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
           color: Colors.white,
           child: InkWell(
             onTap: () => onDeleteFile(item),
+            borderRadius: BorderRadius.circular(12),
             child: Container(
               width: Get.width / 2,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               child: const Text("删除"),
             ),
           ),

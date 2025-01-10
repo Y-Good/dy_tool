@@ -76,7 +76,7 @@ class Utils {
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
-      backgroundColor: const Color(0xFF606060),
+      backgroundColor: const Color(0xFF606572),
     );
   }
 

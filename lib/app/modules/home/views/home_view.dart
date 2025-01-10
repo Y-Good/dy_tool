@@ -14,15 +14,13 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final ctl = Get.find<HomeController>();
     return Scaffold(
-      backgroundColor: const Color(0xFFf6f6f6),
       appBar: AppBar(
-        // backgroundColor: Theme.of(context).primaryColor,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               "当前铃声",
-              style: TextStyle(fontSize: 10, color: Colors.grey),
+              style: TextStyle(fontSize: 10, color: Color(0xFFE0E9F4)),
             ),
             const SizedBox(height: 4),
             Obx(() {
@@ -94,20 +92,21 @@ class HomeView extends GetView<HomeController> {
             child: PlayFloat(),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12).copyWith(bottom: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12).copyWith(
+              bottom: 12,
+            ),
             child: Row(
               children: [
                 Expanded(
                   child: CupertinoButton(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(99)),
+                    color: const Color(0xFF2E384D),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
                     onPressed: ctl.onImport,
-                    child: Text(
+                    child: const Text(
                       "导入",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -116,7 +115,7 @@ class HomeView extends GetView<HomeController> {
                 Expanded(
                   child: CupertinoButton(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(99)),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
                     onPressed: ctl.onSetRingtone,
                     child: const Text(
                       "设置",
