@@ -36,7 +36,7 @@ class HomeView extends GetView<HomeController> {
         actions: [
           IconButton(
             color: Colors.black,
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: () => ctl.readFolderFiles(true),
           ),
         ],
@@ -62,13 +62,16 @@ class HomeView extends GetView<HomeController> {
                   width: 200,
                 ),
                 const SizedBox(height: 16),
-                const Text("暂无数据"),
+                const Text(
+                  "暂无数据",
+                  style: TextStyle(color: Colors.grey),
+                ),
               ],
             ),
           );
         }
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 6),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           itemBuilder: (ctx, idx) {
             var item = ctl.datas[idx];
             return Obx(() {
@@ -99,7 +102,7 @@ class HomeView extends GetView<HomeController> {
               children: [
                 Expanded(
                   child: CupertinoButton(
-                    color: const Color(0xFF2E384D),
+                    color: Colors.white.withOpacity(.08),
                     borderRadius: const BorderRadius.all(Radius.circular(12)),
                     onPressed: ctl.onImport,
                     child: const Text(

@@ -76,23 +76,49 @@ class HomeController extends GetxController
 
   /// 长按操作项
   void onOption(BuildContext context, IFile item) {
-    Get.dialog(
-      UnconstrainedBox(
-        child: Material(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-          color: Colors.white,
-          child: InkWell(
-            onTap: () => onDeleteFile(item),
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              width: Get.width / 2,
-              padding: const EdgeInsets.all(12),
-              child: const Text("删除"),
-            ),
+    Widget widget = UnconstrainedBox(
+      child: SizedBox(
+        width: Get.width,
+        child: DefaultTextStyle(
+          style: const TextStyle(color: Colors.white, fontSize: 17),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () => onDeleteFile(item),
+                child: Container(
+                  height: 56,
+                  alignment: Alignment.center,
+                  child: const Text(
+                    "删除",
+                    style: TextStyle(color: Color(0xFFFA5151)),
+                  ),
+                ),
+              ),
+              Container(height: 8, color: const Color(0xFF111111)),
+              GestureDetector(
+                onTap: () => Get.close(1),
+                child: Container(
+                  height: 56,
+                  alignment: Alignment.center,
+                  child: const Text("取消"),
+                ),
+              ),
+            ],
           ),
         ),
       ),
-      barrierColor: Colors.black38,
+    );
+
+    Get.bottomSheet(
+      widget,
+      backgroundColor: const Color(0xFF1E1E1E),
+      enableDrag: false,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
     );
   }
 

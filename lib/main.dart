@@ -32,11 +32,11 @@ void main() {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: const Color(0xFF0957DE),
-        scaffoldBackgroundColor: const Color(0xFF040815),
+        scaffoldBackgroundColor: const Color(0xFF1E1E1E),
         textTheme: const TextTheme(),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF040815),
-          surfaceTintColor: Color(0xFF040815),
+          backgroundColor: Color(0xFF1E1E1E),
+          surfaceTintColor: Color(0xFF1E1E1E),
           titleTextStyle: TextStyle(
             color: Colors.white,
             fontSize: 18,
